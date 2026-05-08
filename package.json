@@ -1,6 +1,6 @@
 {
   "name": "@patchwindow/seo-mcp",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "MCP server for Google Search Console and Bing Webmaster Tools.",
   "type": "module",
   "main": "dist/index.js",
@@ -13,7 +13,13 @@
     "auth:gsc": "tsx cli/setup-gsc.ts",
     "prepublishOnly": "npm run build"
   },
-  "keywords": ["mcp", "seo", "google-search-console", "bing", "patchwindow"],
+  "keywords": [
+    "mcp",
+    "seo",
+    "google-search-console",
+    "bing",
+    "patchwindow"
+  ],
   "author": "Patch Window <hello@patchwindow.serverdigital.net>",
   "license": "MIT",
   "homepage": "https://patchwindow.serverdigital.net/tools",
