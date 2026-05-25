@@ -7,6 +7,7 @@ export const GSC_REDIRECT_URI = `http://localhost:${GSC_REDIRECT_PORT}/callback`
 export const GSC_SCOPES = [
   "https://www.googleapis.com/auth/webmasters.readonly",
   "https://www.googleapis.com/auth/webmasters",
+  "https://www.googleapis.com/auth/indexing",
 ];
 
 export function getOAuth2Client() {

@@ -9,7 +9,7 @@ export async function startServer() {
 
   const server = new McpServer({
     name: "@patchwindow/seo-mcp",
-    version: "0.1.0",
+    version: "0.2.0",
   });
 
   const allTools = [...gscTools, ...bingTools];

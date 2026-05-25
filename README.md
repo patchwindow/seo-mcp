@@ -4,18 +4,19 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js >= 20](https://img.shields.io/badge/node-%3E%3D20-brightgreen)](https://nodejs.org/)
 
-MCP server for Google Search Console and Bing Webmaster Tools. Give your AI assistant live access to search performance data, indexing status, keyword research, crawl health, and more — directly in the chat.
+MCP server for Google Search Console, Bing Webmaster Tools, and the Google Indexing API. Give your AI assistant live access to search performance data, indexing status, keyword research, crawl health, and programmatic URL submission — directly in the chat.
 
 ---
 
 ## Features
 
-- **10 SEO tools** across Google Search Console and Bing Webmaster Tools
+- **12 SEO tools** across Google Search Console, Google Indexing API, and Bing Webmaster Tools
 - **Keyword research** via Bing — search volume and related keywords not available in GSC
 - **Traffic drop analysis** — automatically compare two periods and surface the biggest drops
 - **Striking distance finder** — identify queries in positions 4–20 ready for quick ranking gains
 - **Brand vs. non-brand split** — segment traffic without leaving your AI chat
 - **Dual URL inspection** — inspect any URL in both Google and Bing simultaneously
+- **Google Indexing API** — request indexing or re-indexing for individual URLs or batches of up to 200
 - **Simple auth** — Bing needs one env var; GSC uses a one-time OAuth2 flow with auto-refreshing tokens
 - **Config file defaults** — set your site URL once, skip it on every tool call
 
@@ -66,6 +67,7 @@ GSC requires OAuth2. Service accounts do not work with the Search Console API �
 2. Create a new project (or select an existing one)
 3. Go to **APIs & Services → Library**
 4. Search for **Google Search Console API** and enable it
+5. Search for **Web Search Indexing API** and enable it (required for `request_indexing` and `request_indexing_batch`)
 
 **Step 2: Create OAuth2 credentials**
 
@@ -89,6 +91,8 @@ npx @patchwindow/seo-mcp auth gsc
 ```
 
 A browser window opens for Google login. After approving, the token is saved to `~/.seo-mcp/gsc-token.json`. You only need to do this once — the token refreshes automatically.
+
+> **Re-auth required for v0.2.0:** The Indexing API scope (`https://www.googleapis.com/auth/indexing`) was added in v0.2.0. If you authenticated with an older version, run `npx @patchwindow/seo-mcp auth gsc` again to grant the new scope. Your existing token will be replaced.
 
 ---
 
@@ -168,6 +172,8 @@ Restart your AI client after saving the config.
 | `gsc_url_inspection` | Indexing status, crawl date, canonical URL, page fetch state, rich results, and mobile usability for a specific URL. | `url` | `site_url`* |
 | `gsc_sitemap_list` | All sitemaps submitted to GSC with status, URL counts, indexed counts, and error summary. | — | `site_url`* |
 | `gsc_brand_nonbrand` | Split search traffic into branded and non-branded segments with aggregated clicks, impressions, CTR, and position. | `start_date`, `end_date`, `brand_terms` | `site_url`*, `show_top_queries` |
+| `request_indexing` | Ask Google to index or re-index a single URL via the Indexing API. Returns confirmation and `notifyTime`. | `url` | — |
+| `request_indexing_batch` | Ask Google to index or re-index a batch of URLs (max 200 — daily quota). Returns a per-URL report of successes and failures. | `urls` | `delay_ms` |
 
 ### Bing Webmaster Tools
 
@@ -266,6 +272,29 @@ Restart your AI client after saving the config.
 
 </details>
 
+<details>
+<summary>request_indexing</summary>
+
+| Parameter | Type | Description |
+|---|---|---|
+| `url` | string | The publicly accessible URL to request indexing for |
+
+Requires the `https://www.googleapis.com/auth/indexing` scope. If you receive a 403, re-run `npx @patchwindow/seo-mcp auth gsc` and ensure the **Web Search Indexing API** is enabled in your Google Cloud project.
+
+</details>
+
+<details>
+<summary>request_indexing_batch</summary>
+
+| Parameter | Type | Description |
+|---|---|---|
+| `urls` | string[] | Array of publicly accessible URLs (min 1, max 200) |
+| `delay_ms` | number | Milliseconds between requests. Default: 10. Max: 10000 |
+
+The Google Indexing API has a default quota of 200 URL notifications per day. The batch tool sends requests in series with the configured delay to stay within Google's recommended rate of 100 req/s.
+
+</details>
+
 ---
 
 ## Examples
@@ -287,15 +316,21 @@ Ask your AI assistant:
 **Understand brand exposure:**
 > "Split my search traffic for Q1 2025 into branded and non-branded. My brand terms are 'acme' and 'acmecorp'. Show me the top 10 queries for each segment."
 
+**Request indexing after a publish:**
+> "I just published three new blog posts. Request indexing for https://example.com/blog/post-1, /post-2, and /post-3."
+
+**Bulk re-index after a site migration:**
+> "Here are 150 URLs that moved during our migration. Request indexing for all of them."
+
 ---
 
 ## Roadmap
 
-Planned for v2:
+Planned for a future release:
 
 - `gsc_top_pages` — top pages by traffic with trend comparison
 - `bing_link_counts` — inbound link data (not available in GSC API)
-- `bing_url_submit` — trigger reindexing for new or updated URLs
+- `bing_url_submit` — trigger reindexing for new or updated URLs in Bing
 - `gsc_batch_url_inspection` — inspect a list of URLs with rate-limit handling
 - `bing_crawl_settings` — read and update Bing crawl frequency settings
 - Multi-site support — switch between properties without reconfiguring

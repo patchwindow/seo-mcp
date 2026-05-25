@@ -4,6 +4,7 @@ import { gscTrafficDrop } from "./traffic-drop.js";
 import { gscUrlInspection } from "./url-inspection.js";
 import { gscSitemapList } from "./sitemap-list.js";
 import { gscBrandNonbrand } from "./brand-nonbrand.js";
+import { gscRequestIndexing, gscRequestIndexingBatch } from "./request-indexing.js";
 import type { ToolDefinition } from "../../types/tool.js";
 
 export const gscTools: ToolDefinition[] = [
@@ -13,4 +14,6 @@ export const gscTools: ToolDefinition[] = [
   gscUrlInspection as unknown as ToolDefinition,
   gscSitemapList as unknown as ToolDefinition,
   gscBrandNonbrand as unknown as ToolDefinition,
+  gscRequestIndexing as unknown as ToolDefinition,
+  gscRequestIndexingBatch as unknown as ToolDefinition,
 ];
