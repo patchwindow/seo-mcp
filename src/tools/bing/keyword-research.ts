@@ -30,7 +30,7 @@ export const bingKeywordResearch: ToolDefinition<typeof schema> = {
     "Research keywords using Bing Webmaster Tools. Returns monthly search volume (impressions) for a keyword and a list of related keywords. This keyword data is exclusive to Bing and not available in Google Search Console.",
   schema,
   handler: async (args, config) => {
-    const apiKey = getBingApiKey();
+    const apiKey = getBingApiKey(config.bing?.api_key);
 
     const siteUrl = args.site_url ?? config.bing?.default_site;
     if (!siteUrl) {

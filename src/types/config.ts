@@ -3,6 +3,7 @@ export interface GscConfig {
 }
 
 export interface BingConfig {
+  api_key?: string;
   default_site?: string;
 }
 

@@ -27,7 +27,7 @@ export const bingSitemapList: ToolDefinition<typeof schema> = {
     "List all sitemaps submitted to Bing Webmaster Tools for a site, including URL counts, indexed counts, errors, and last crawl time.",
   schema,
   handler: async (args, config) => {
-    const apiKey = getBingApiKey();
+    const apiKey = getBingApiKey(config.bing?.api_key);
 
     const siteUrl = args.site_url ?? config.bing?.default_site;
     if (!siteUrl) {

@@ -38,7 +38,7 @@ export const bingCrawlHealth: ToolDefinition<typeof schema> = {
     "Get crawl statistics and crawl issues from Bing Webmaster Tools. Shows crawl frequency, error counts by type (4xx, timeouts, DNS failures, blocked), and a list of specific crawl problems.",
   schema,
   handler: async (args, config) => {
-    const apiKey = getBingApiKey();
+    const apiKey = getBingApiKey(config.bing?.api_key);
 
     const siteUrl = args.site_url ?? config.bing?.default_site;
     if (!siteUrl) {

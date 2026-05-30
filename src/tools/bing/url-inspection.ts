@@ -30,7 +30,7 @@ export const bingUrlInspection: ToolDefinition<typeof schema> = {
     "Inspect a URL's indexing and crawl status in Bing Webmaster Tools. Returns HTTP status, indexing state, crawl date, page title, link counts, and whether the URL is blocked.",
   schema,
   handler: async (args, config) => {
-    const apiKey = getBingApiKey();
+    const apiKey = getBingApiKey(config.bing?.api_key);
 
     const siteUrl = args.site_url ?? config.bing?.default_site;
     if (!siteUrl) {

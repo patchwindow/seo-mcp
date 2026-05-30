@@ -1,8 +1,11 @@
-export function getBingApiKey(): string {
-  const key = process.env.BING_WEBMASTER_API_KEY;
+export function getBingApiKey(configKey?: string): string {
+  const key = process.env.BING_WEBMASTER_API_KEY ?? configKey;
   if (!key) {
     throw new Error(
-      "BING_WEBMASTER_API_KEY not set.\n" +
+      "Bing API key not configured.\n" +
+      "Either set the BING_WEBMASTER_API_KEY environment variable, or add\n" +
+      '  "bing": { "api_key": "<your-key>" }\n' +
+      "to ~/.seo-mcp/config.json.\n" +
       "Generate a key at: https://www.bing.com/webmasters → Settings → API Access"
     );
   }
