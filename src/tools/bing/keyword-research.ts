@@ -49,7 +49,7 @@ export const bingKeywordResearch: ToolDefinition<typeof schema> = {
       "",
     ];
 
-    const kwData = (await bingGet("GetKeyword", { siteUrl, keyword: args.keyword, country, language }, apiKey)) as BingKeywordResult | null;
+    const kwData = (await bingGet("GetKeyword", { siteUrl, q: args.keyword, country, language }, apiKey)) as BingKeywordResult | null;
 
     if (kwData) {
       parts.push(`Monthly impressions (exact): ${kwData.ImpressionCount ?? "—"}`);
@@ -67,7 +67,7 @@ export const bingKeywordResearch: ToolDefinition<typeof schema> = {
     }
 
     if (includeRelated) {
-      const related = (await bingGet("GetRelatedKeywords", { siteUrl, keyword: args.keyword, country, language }, apiKey)) as BingRelatedKeyword[] | null;
+      const related = (await bingGet("GetRelatedKeywords", { siteUrl, q: args.keyword, country, language }, apiKey)) as BingRelatedKeyword[] | null;
       const relatedList = Array.isArray(related) ? related : [];
 
       if (relatedList.length > 0) {
